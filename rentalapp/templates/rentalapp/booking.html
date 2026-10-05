@@ -1,0 +1,171 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Book {{ vehicle.name }}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'rentalapp/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        🚗 Vehicle Rental
+    </div>
+
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+
+        <a href="{% url 'vehicles' %}">
+            Vehicles
+        </a>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+    </nav>
+
+</header>
+
+
+<section class="booking-section">
+
+    <div class="booking-card">
+
+        <h1>Book Your Vehicle</h1>
+
+        <div class="booking-vehicle">
+
+            {% if vehicle.image %}
+
+                <img
+                    src="{{ vehicle.image }}"
+                    alt="{{ vehicle.name }}"
+                >
+
+            {% else %}
+
+                <div class="no-image">
+                    🚗
+                </div>
+
+            {% endif %}
+
+
+            <div>
+
+                <h2>
+                    {{ vehicle.name }}
+                </h2>
+
+                <p>
+                    {{ vehicle.brand }}
+                    {{ vehicle.model }}
+                </p>
+
+                <p class="price">
+                    ₹{{ vehicle.price_per_day }} / day
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form method="POST"
+              id="bookingForm">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+
+                <label for="start_date">
+                    Start Date
+                </label>
+
+                <input
+                    type="date"
+                    id="start_date"
+                    name="start_date"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="end_date">
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="end_date"
+                    name="end_date"
+                    required
+                >
+
+            </div>
+
+
+            <div class="total-box">
+
+                <h3>
+                    Total Price
+                </h3>
+
+                <p id="totalPrice">
+                    ₹0.00
+                </p>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Confirm Booking
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 Vehicle Rental System
+    </p>
+
+</footer>
+
+
+<script>
+    const pricePerDay =
+        Number("{{ vehicle.price_per_day }}");
+</script>
+
+<script src="{% static 'rentalapp/js/script.js' %}">
+</script>
+
+</body>
+</html>

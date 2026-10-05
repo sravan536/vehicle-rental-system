@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Available Vehicles</title>
+
+    <link rel="stylesheet"
+          href="{% static 'rentalapp/css/style.css' %}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        🚗 Vehicle Rental
+    </div>
+
+    <nav>
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'vehicles' %}">
+            Vehicles
+        </a>
+
+        {% if user.is_authenticated %}
+
+            <a href="{% url 'dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'logout' %}">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'login' %}">
+                Login
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+</header>
+
+
+<section class="section">
+
+    <h1>Available Vehicles</h1>
+
+
+    <!-- SEARCH AND FILTER -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="vehicleSearch"
+            placeholder="Search vehicle..."
+        >
+
+        <select id="vehicleType">
+
+            <option value="all">
+                All Types
+            </option>
+
+            <option value="Car">
+                Cars
+            </option>
+
+            <option value="Bike">
+                Bikes
+            </option>
+
+            <option value="Scooter">
+                Scooters
+            </option>
+
+            <option value="SUV">
+                SUVs
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- VEHICLE GRID -->
+
+    <div class="vehicle-grid" id="vehicleGrid">
+
+        {% for vehicle in vehicles %}
+
+        <div class="vehicle-card"
+             data-name="{{ vehicle.name|lower }}"
+             data-type="{{ vehicle.vehicle_type }}">
+
+
+            <!-- VEHICLE IMAGE -->
+
+            <div class="vehicle-image">
+
+                {% if vehicle.image %}
+
+                    <img
+                        src="{{ vehicle.image.url }}"
+                        alt="{{ vehicle.name }}"
+                    >
+
+                {% else %}
+
+                    <div class="no-image">
+                        🚗
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- VEHICLE INFORMATION -->
+
+            <div class="card-content">
+
+                <h3>
+                    {{ vehicle.name }}
+                </h3>
+
+                <p>
+                    <strong>Type:</strong>
+                    {{ vehicle.vehicle_type }}
+                </p>
+
+                <p>
+                    <strong>Brand:</strong>
+                    {{ vehicle.brand }}
+                </p>
+
+                <p>
+                    <strong>Model:</strong>
+                    {{ vehicle.model }}
+                </p>
+
+                <p>
+                    <strong>Year:</strong>
+                    {{ vehicle.year }}
+                </p>
+
+                <p class="price">
+                    ₹{{ vehicle.price_per_day }} / day
+                </p>
+
+                <a
+                    href="{% url 'vehicle_detail' vehicle.id %}"
+                    class="btn"
+                >
+                    View Details
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+            <p>No vehicles available.</p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 Vehicle Rental System
+    </p>
+
+</footer>
+
+
+<script src="{% static 'rentalapp/js/script.js' %}"></script>
+
+</body>
+
+</html>
